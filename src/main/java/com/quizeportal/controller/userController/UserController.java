@@ -7,9 +7,12 @@ import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.StreamingHttpOutputMessage.Body;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +24,8 @@ import com.quizeportal.model.userModel.Role;
 import com.quizeportal.model.userModel.User;
 import com.quizeportal.model.userModel.UserRole;
 import com.quizeportal.service.userService.UserService;
+
+import helper.UserFoundException;
 
 @RequestMapping("/user")
 @RestController
@@ -63,5 +68,15 @@ public class UserController {
 	public HttpStatus deleteByid(@PathVariable("userId") long userId) {
 		return this.userService.deleteById(userId);
 
+	}
+	
+	@ExceptionHandler(UserFoundException.class)
+	public ResponseEntity<UserFoundException> exceptionHandler(UserFoundException ex){
+		
+		 return ResponseEntity
+		        .status(HttpStatus.BAD_REQUEST)
+		        .body(ex);
+		
+		
 	}
 }

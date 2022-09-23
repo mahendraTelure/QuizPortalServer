@@ -1,5 +1,6 @@
 package com.quizeportal.controller.quizController;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.quizeportal.model.quiz.Category;
 import com.quizeportal.model.quiz.Quiz;
 import com.quizeportal.service.quizService.QuizService;
 
@@ -50,15 +52,27 @@ public class QuizController {
 		this.quizService.deleteQuiz(qId);
 	}
 	
+	@GetMapping("/category/{cid}")
+	public List<Quiz> getquizzesOfCategory(@PathVariable("cid") Long cid){
+		Category category = new Category();
+		category.setCid(cid);
+		return this.quizService.getQuizzesOfCategory(category);
+	}
 	
+//	get active quizzes
+	@GetMapping("/active")
+	public List<Quiz> getActive(){
+		return this.quizService.getActiveQuizzes();
+	}
 	
-	
-	
-	
-	
-	
-	
-	
+	@GetMapping("/category/active/{cid}")
+	public List<Quiz> getActiveQuizzes(@PathVariable("cid") Long cid){
+		
+		Category category = new Category();
+		category.setCid(cid);
+		
+		return this.quizService.getActiveQuizzesOfCategory(category);
+	}
 	
 	
 }

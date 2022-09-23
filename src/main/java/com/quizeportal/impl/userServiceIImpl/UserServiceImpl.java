@@ -12,6 +12,8 @@ import com.quizeportal.repository.userRepository.RoleRepository;
 import com.quizeportal.repository.userRepository.UserRepository;
 import com.quizeportal.service.userService.UserService;
 
+import helper.UserFoundException;
+
 @Service
 public class UserServiceImpl implements UserService{
 
@@ -28,7 +30,7 @@ public class UserServiceImpl implements UserService{
 		User local = this.userRepository.findByUsername(user.getUsername());
 		if(local!=null) {
 			System.out.println("user is already registerd");
-			throw new Exception("User already present !!");
+			throw new UserFoundException();
 		}else {
 			for(UserRole ur:userRoles) {
 				roleRepository.save(ur.getRole());

@@ -1,5 +1,7 @@
 package com.quizeportal.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,6 +11,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,8 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.quizeportal.Config.JwtUtil;
 import com.quizeportal.model.JwtRequest;
 import com.quizeportal.model.JwtResponse;
+import com.quizeportal.model.userModel.User;
 
 @RestController
+@CrossOrigin("*")
 public class AuthenticateController {
 
 	@Autowired
@@ -55,5 +61,13 @@ public class AuthenticateController {
 		} catch (BadCredentialsException e) {
 			throw new Exception("Invalid credentials " + e.getMessage());
 		}
+	}
+	
+//	returns the details of current user
+	@CrossOrigin
+	@GetMapping("/current-user")
+	public User getCurrentUser(Principal principal) {
+//		this.userDetailsService.loadUserByUsername(principal.getName());
+		return (User) this.userDetailsService.loadUserByUsername(principal.getName());
 	}
 }
